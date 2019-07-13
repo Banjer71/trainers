@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+ 
+  constructor(props) {
+    super(props);
+    this.state = {
+      colours: []
+    }
+
+    console.log(this.state.colours)
+    
+
+  }
+  componentDidMount() {
+    fetch('https://all.data.alexbooster.com/json/trainers.json')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        //console.log(data)
+
+        this.setState({
+          colours: [
+            { size: data[0].allSizes },
+            { color: data[0].allColors },
+            { image: data[0].allImages },
+            { bySize: data[0].bySize }
+          ]
+        });
+      });
+  }
+
+  
+  render() {
+    console.log(this.state.colours[0])
+    return (
+      <div className="App">
+        <select>
+        {this.state.colours.map(item => {
+          return <option>{item.color}</option>
+        })}
+        </select>
+
+      </div>
+    );
+  }
 }
 
 export default App;
